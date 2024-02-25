@@ -127,15 +127,9 @@ class Parser_fb:
             buc = adset_name[bracket_index + 2:adset_name.rindex(']')]
 
             # Calculate cr and store the values in db_fb
-            cr = leads / link_click if link_click != 0 else 0
+            cr =int(round((leads / link_click), 2)*100) if link_click != 0 else 0
             data_entry = [number_fb, id_fb, buc, cr]
-            # print(data_entry)
-            # Append the new list to db_fb
-            db_fb.append(data_entry) 
-            
-            
+            db_fb.append(data_entry)
         time.sleep(2)
-    print(db_fb[0])
-    # db_fb = list(zip(number_fb_list, id_fb_list, buc_list, cr_list))
-    # print(db_fb1)
+
 
