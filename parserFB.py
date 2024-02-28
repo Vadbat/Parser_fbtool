@@ -74,8 +74,8 @@ class Parser_fb:
     for cookies in cookies_dist2:
         session3.cookies.set(**cookies)
 
-    id_list = ['group_260139', 'group_344356', 'group_351347']
-
+    id_list = ['group_260139']
+# , 'group_344356', 'group_351347'
     db_fb =[]
     for id_value in id_list:
         params = {
@@ -88,23 +88,20 @@ class Parser_fb:
         }
 
         response = session3.post(params_url, headers=header, params=params, cookies=cookie, data=data3)
-
         json_data = response.json()
+        
+    
+    # json_data = response.json()
         reviews = json_data[0]['rows']
-        
-        
+
         for r in reviews:
             adset_name = r['adset_name']
-            # if not adset_name.startswith('№') or '?' in adset_name[adset_name.index('№'):]:
-            #     continue
             link_click = r['link_click']
             leads = r['leads']
 
             if '№' not in adset_name:
-                # print("№ not found in adset_name")
                 continue
             
-            # Check if '?' follows '№'
             start_index = adset_name.index('№') + 1
             end_index_before_pipe = adset_name.rfind(' |')
             end_index_before_question = adset_name.find(' ?', start_index)
@@ -113,12 +110,10 @@ class Parser_fb:
                 print("Skipping: '?' found after '№'")
                 continue
             
-            # Check if '| ' and ' [' are present
             pipe_index = adset_name.find('| ', start_index)
             bracket_index = adset_name.rfind(' [')
             
             if pipe_index == -1 or bracket_index == -1 or bracket_index <= pipe_index:
-                # print("Skipping: '| ' or ' [' not found after '№'")
                 continue
 
             # Extract values
@@ -130,6 +125,8 @@ class Parser_fb:
             cr =int(round((leads / link_click), 2)*100) if link_click != 0 else 0
             data_entry = [number_fb, id_fb, buc, cr]
             db_fb.append(data_entry)
-        time.sleep(2)
-
-
+        # except (json.JSONDecodeError, KeyError) as e:
+        #     print(f"Error decoding JSON or accessing data: {e}")
+        #     # Handle the error or exit the loop accordingly
+        #     continue
+    print(db_fb)
